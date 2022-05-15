@@ -1,0 +1,222 @@
+---
+title: "Storm data analysis"
+output:
+  html_document:
+    df_print: paged
+---
+# Explore the NOAA Storm Database
+
+## Synopsis
+
+Storms and other severe weather events can cause both public health and economic problems for communities and municipalities. Many severe events can result in fatalities, injuries, and property damage, and preventing such outcomes to the extent possible is a key concern.
+
+This project involves exploring the U.S. National Oceanic and Atmospheric Administration’s (NOAA) storm database. This database tracks characteristics of major storms and weather events in the United States, including when and where they occur, as well as estimates of any fatalities, injuries, and property damage.
+
+In this report,effect of weather events on personal as well as property damages was studied. Barplots were plotted seperately for the top 8 weather events that causes highest fatalities and highest injuries. Results indicate that most Fatalities and injuries were caused by Tornados.Also, barplots were plotted for the top 8 weather events that causes the highest property damage and crop damage.
+
+## Data Processing
+
+### Loading packages and dataset
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r echo = TRUE}
+# load packages
+
+library(ggplot2)
+library(dplyr)
+library(reshape2)
+```
+
+```{r}
+sd<-download.file("https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2","./storm_dataset")
+sd <- read.csv(bzfile("storm_dataset"))
+```
+```{r}
+sd
+```
+
+### Answering the following questions
+
+1. Which types of events (as indicated in the EVTYPE #variable) are most harmful with respect to population health?
+
+Compare the events of health problems (injuries and fatalities)
+
+```{r echo = TRUE}
+# aggregate the EVTYPE of  injuries
+injuries <- arrange(aggregate(INJURIES ~ EVTYPE, sd, sum), desc(INJURIES))
+
+injuries = injuries[1:20,] # select top 20 events of injuries
+
+
+# aggregate the EVTYPE of  fatalities
+fatalities <- arrange(aggregate(FATALITIES ~ EVTYPE, sd, sum), desc(FATALITIES))
+
+fatalities = fatalities[1:20,] # select top 20 events of fatalities
+
+```
+
+### Make plot
+
+```{r}
+par(mfrow = c(1, 2), mar = c(12, 4, 3, 2), mgp = c(3, 1, 0), cex = 0.8)
+
+barplot(injuries$INJURIES, las = 3, names.arg = injuries$EVTYPE, main = "Events with Highest Injuries", 
+        ylab = "Number of injuries", col = "red")
+
+
+barplot(fatalities$FATALITIES, las = 3, names.arg = fatalities$EVTYPE, main = "Events with Highest Fatalities", 
+        ylab = "Number of fatalities", col = "blue")
+```
+
+# Restuls
+
+The maximum of fatalities and injuries were caused by Tornados. The second major cause of fatalities and injuries was Excessive Heat and Thunderstorm wind, respectively.
+
+### Second question
+
+2. Which types of events have the greatest economic consequences across the US?
+
+Here we have property damage and crop damage in economic
+
+```{r}
+# property damage
+propertyDamage <- aggregate(PROPDMG ~ EVTYPE, data = sd, FUN = sum)
+
+propertyDamage <- propertyDamage[order(propertyDamage$PROPDMG, decreasing = TRUE), ]
+
+# Select top 10 harmful events
+
+maxPropertyDamage <- propertyDamage[1:10, ]
+print(maxPropertyDamage)
+
+
+# crop damage data
+cropDamage <- aggregate(CROPDMG ~ EVTYPE, data = sd, FUN = sum)
+cropDamage <- cropDamage[order(cropDamage$CROPDMG, decreasing = TRUE), ]
+
+# 10 most harmful events
+maxCropDamage <- cropDamage[1:10, ]
+print(maxCropDamage)
+
+```
+
+### Make plot
+
+```{r echo = TRUE}
+
+par(mfrow = c(1, 2), mar = c(15, 4, 3, 2), mgp = c(3, 1, 0), cex = 0.8)
+
+barplot(maxPropertyDamage$PROPDMG, las = 3, names.arg = maxPropertyDamage$EVTYPE, 
+        main = "Top 10 Events with\n Greatest Property Damages", 
+        ylab = "Number of Injuries", col = maxPropertyDamage$PROPDMG)
+        
+        
+barplot(maxCropDamage$CROPDMG, las = 3, names.arg = maxCropDamage$EVTYPE, 
+        main = "Top 10 Events with\n Greatest Crop Damages", 
+        ylab = "Number of Injuries", col = maxCropDamage$CROPDMG)
+
+```
+
+# Results
+
+On the other hand, the most cause for property damage was Floods and the second important event was Hurricanes/Typhoos.
+Moreover, crop damages first were caused by Drought and the next major cause was Floods.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
